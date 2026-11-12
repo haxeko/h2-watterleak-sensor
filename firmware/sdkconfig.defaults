@@ -1,0 +1,83 @@
+# h2-watterleak-sensor rev A - ESP32-H2-WROOM-02C-H4S, Matter over Thread, battery ICD (SIT)
+# Base: esp-matter release/v1.6 examples/icd_app/sdkconfig.defaults (ESP-IDF v5.5.5)
+
+CONFIG_IDF_TARGET="esp32h2"
+CONFIG_ESPTOOLPY_FLASHSIZE_4MB=y
+
+# Partition table: 2 x 1.875 MB OTA slots (partitions.csv)
+CONFIG_PARTITION_TABLE_CUSTOM=y
+CONFIG_PARTITION_TABLE_FILENAME="partitions.csv"
+CONFIG_PARTITION_TABLE_OFFSET=0xC000
+
+# Console on UART0 (J1 pads TXD0/RXD0). No USB-Serial-JTAG console: nothing extra runs on battery.
+CONFIG_ESP_CONSOLE_UART_DEFAULT=y
+CONFIG_ESP_CONSOLE_SECONDARY_NONE=y
+
+# ---------------------------------------------------------------- BLE: commissioning only
+CONFIG_BT_ENABLED=y
+CONFIG_BT_NIMBLE_ENABLED=y
+CONFIG_BT_NIMBLE_ENABLE_CONN_REATTEMPT=n
+CONFIG_USE_BLE_ONLY_FOR_COMMISSIONING=y
+CONFIG_BT_LE_SLEEP_ENABLE=y
+CONFIG_BT_LE_LP_CLK_SRC_MAIN_XTAL=y
+
+# ---------------------------------------------------------------- no Wi-Fi
+CONFIG_ENABLE_WIFI_STATION=n
+CONFIG_ENABLE_WIFI_AP=n
+CONFIG_ESP_WIFI_SOFTAP_SUPPORT=n
+
+# ---------------------------------------------------------------- Thread: Minimal Thread Device (sleepy)
+CONFIG_OPENTHREAD_ENABLED=y
+CONFIG_OPENTHREAD_MTD=y
+CONFIG_OPENTHREAD_SRP_CLIENT=y
+CONFIG_OPENTHREAD_CLI=n
+CONFIG_OPENTHREAD_LOG_LEVEL_DYNAMIC=n
+CONFIG_OPENTHREAD_LOG_LEVEL_NOTE=y
+
+CONFIG_LWIP_IPV6_NUM_ADDRESSES=8
+CONFIG_LWIP_MULTICAST_PING=y
+CONFIG_LWIP_IPV6_AUTOCONFIG=n
+CONFIG_LWIP_ND6=n
+CONFIG_LWIP_IPV4=n
+CONFIG_DISABLE_IPV4=y
+CONFIG_USE_MINIMAL_MDNS=n
+
+CONFIG_MBEDTLS_HKDF_C=y
+CONFIG_MBEDTLS_SSL_PROTO_DTLS=y
+
+# ---------------------------------------------------------------- Matter
+CONFIG_ENABLE_OTA_REQUESTOR=y
+CONFIG_ESP_MATTER_MAX_DYNAMIC_ENDPOINT_COUNT=2
+CONFIG_SUPPORT_GROUPCAST_CLUSTER=n
+
+# Development identity: CSA test vendor/product ID, test DAC and test onboarding data
+# (passcode 20202021, discriminator 3840). Controllers show "uncertified device".
+CONFIG_DEVICE_VENDOR_ID=0xFFF1
+CONFIG_DEVICE_PRODUCT_ID=0x8000
+
+# ---------------------------------------------------------------- ICD server, Short Idle Time
+# Slow poll 15 s (SIT maximum), fast poll 200 ms, active mode 1 s, idle mode 1 h (subscription max interval).
+CONFIG_ENABLE_ICD_SERVER=y
+CONFIG_ENABLE_ICD_LIT=n
+CONFIG_ICD_SLOW_POLL_INTERVAL_MS=15000
+CONFIG_ICD_FAST_POLL_INTERVAL_MS=200
+CONFIG_ICD_ACTIVE_MODE_INTERVAL_MS=1000
+CONFIG_ICD_ACTIVE_MODE_THRESHOLD_MS=1000
+CONFIG_ICD_IDLE_MODE_INTERVAL_SEC=3600
+
+# ---------------------------------------------------------------- power management (auto light sleep)
+CONFIG_PM_ENABLE=y
+CONFIG_PM_DFS_INIT_AUTO=y
+CONFIG_PM_POWER_DOWN_PERIPHERAL_IN_LIGHT_SLEEP=y
+CONFIG_ESP_SLEEP_POWER_DOWN_FLASH=y
+CONFIG_ESP_PHY_MAC_BB_PD=y
+CONFIG_FREERTOS_HZ=1000
+CONFIG_FREERTOS_USE_TICKLESS_IDLE=y
+CONFIG_IEEE802154_SLEEP_ENABLE=y
+
+# 32.768 kHz crystal Y1 on GPIO13/14 (sleep clock, no RC calibration on every wake)
+CONFIG_RTC_CLK_SRC_EXT_CRYS=y
+
+# ---------------------------------------------------------------- logging
+# INFO is useful on the bench. For the battery build use WARN (fewer UART bytes per wake):
+# CONFIG_LOG_DEFAULT_LEVEL_WARN=y

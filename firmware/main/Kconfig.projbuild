@@ -1,0 +1,123 @@
+menu "h2-watterleak-sensor"
+
+    menu "Water probe"
+        config APP_PROBE_CONFIRM_SAMPLES
+            int "Wet samples needed to confirm a leak"
+            range 1 10
+            default 3
+            help
+                FR-03: a leak is reported after this many consecutive wet samples
+                (first one taken right after the EXT1 wake-up).
+
+        config APP_PROBE_CONFIRM_INTERVAL_MS
+            int "Interval between confirmation samples (ms)"
+            range 20 1000
+            default 100
+
+        config APP_PROBE_WET_PULSE_PERIOD_S
+            int "Pulsed sampling period while wet (s)"
+            range 1 600
+            default 10
+            help
+                FR-04: while wet the probe is not biased; it is pulsed once per period.
+
+        config APP_PROBE_WET_PULSE_MS
+            int "Excitation pulse length while wet (ms)"
+            range 1 100
+            default 5
+
+        config APP_PROBE_DRY_HOLD_S
+            int "Dry time before reporting 'no leak' (s)"
+            range 5 3600
+            default 30
+
+        config APP_PROBE_DRY_VERIFY_PULSE_MS
+            int "Final verification pulse before reporting dry (ms)"
+            range 5 500
+            default 50
+            help
+                Longer pulse (more sensitive: the gate RC fully settles) taken once before
+                going back to 'dry', so high-resistance water does not toggle the state.
+    endmenu
+
+    menu "Battery"
+        config APP_BATTERY_PERIOD_MIN
+            int "Battery measurement period (min)"
+            range 10 1440
+            default 360
+
+        config APP_BATTERY_CAPACITY_MAH
+            int "Battery capacity (mAh)"
+            default 1500
+            help
+                CR123A (Li-MnO2) at low drain: about 1500 mAh.
+
+        config APP_BATTERY_AVG_CURRENT_UA
+            int "Average current used by the charge counter (uA at the battery)"
+            default 43
+            help
+                Phase 1 power budget, typical scenario: 34 uA at 3.3 V = 43 uA drawn from the
+                CR123A through the TPS63900 (tools/power_budget.py). Replace with the value
+                measured in phase 6.
+
+        config APP_BATTERY_WARN_PERCENT
+            int "BatChargeLevel = Warning at or below (%)"
+            default 15
+
+        config APP_BATTERY_CRIT_PERCENT
+            int "BatChargeLevel = Critical at or below (%)"
+            default 5
+
+        config APP_BATTERY_NEW_CELL_MV
+            int "Voltage that marks a fresh cell after power-on (mV)"
+            default 3150
+            help
+                After a power-on reset (cell inserted) a reading at or above this value
+                resets the charge counter to 0 % used. A Li-MnO2 cell rests near 3.25 V when
+                new and near 3.05-3.10 V at half capacity, so 3.15 V separates the two.
+    endmenu
+
+    menu "Button and LED"
+        config APP_BUTTON_WARN_MS
+            int "Hold time for the reset warning (ms)"
+            default 5000
+
+        config APP_BUTTON_RESET_MS
+            int "Hold time for factory reset (ms)"
+            default 10000
+            help
+                Factory reset happens on release after this hold time, never while the button
+                is still pressed: GPIO9 is the BOOT strap, a reboot with it low enters download mode.
+
+        config APP_BUTTON_STUCK_MS
+            int "Hold time after which the button is treated as stuck (ms)"
+            default 30000
+
+        config APP_LED_LEAK_MAX_MIN
+            int "Maximum duration of the leak LED pattern (min)"
+            default 60
+    endmenu
+
+    menu "Radio and network"
+        config APP_THREAD_TX_POWER_DBM
+            int "Thread TX power (dBm)"
+            range -24 20
+            default 9
+            help
+                +9 dBm draws about 60 mA vs 140 mA at +20 dBm (ESP32-H2 datasheet).
+                Tune after the range test (phase 6).
+
+        config APP_COMMISSIONING_WINDOW_S
+            int "Commissioning window opened by a short press (s)"
+            range 180 900
+            default 900
+
+        config APP_FACTORY_RESET_ON_LAST_FABRIC_REMOVED
+            bool "Factory reset when the last fabric is removed"
+            default y
+            help
+                Removing the sensor from the last controller returns it to the out-of-box state
+                (Thread credentials erased, BLE commissioning available again).
+    endmenu
+
+endmenu
