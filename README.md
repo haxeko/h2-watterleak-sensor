@@ -8,7 +8,7 @@ Thiết bị dùng được với Apple Home và Home Assistant thông qua Threa
 | # | Giai đoạn | Tài liệu | Trạng thái |
 |---|---|---|---|
 | 1 | Yêu cầu & ngân sách dòng | [docs/01-yeu-cau-va-ngan-sach-dong.md](docs/01-yeu-cau-va-ngan-sach-dong.md) | ✅ Đã chốt |
-| 2 | Sơ đồ khối + gán chân GPIO | — | Chưa bắt đầu |
+| 2 | Sơ đồ khối + gán chân GPIO | [docs/02-so-do-khoi-va-gan-chan.md](docs/02-so-do-khoi-va-gan-chan.md) | Bản nháp |
 | 3 | Sơ đồ nguyên lý (KiCad) | — | Chưa bắt đầu |
 | 4 | Layout PCB, DRC, BOM, CPL | — | Chưa bắt đầu |
 | 5 | Firmware (ESP-IDF + esp-matter) | — | Chưa bắt đầu |
