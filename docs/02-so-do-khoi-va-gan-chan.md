@@ -1,6 +1,6 @@
 # Giai đoạn 2 — Sơ đồ khối & gán chân GPIO
 
-> **Trạng thái:** BẢN NHÁP. Đầu vào là các quyết định đã chốt ở [GĐ1 §9](01-yeu-cau-va-ngan-sach-dong.md#9-quyết-định-đã-chốt): CR123A, ESP32-H2-WROOM-02C-H4S, không buzzer, 2 kênh đầu dò.
+> **Trạng thái:** ĐÃ CHỐT (2026-11-12), xem [§10](#10-quyết-định-đã-chốt-trước-gđ3). Đầu vào là các quyết định đã chốt ở [GĐ1 §9](01-yeu-cau-va-ngan-sach-dong.md#9-quyết-định-đã-chốt): CR123A, ESP32-H2-WROOM-02C-H4S, không buzzer, 2 kênh đầu dò.
 > Đã đối chiếu với ESP32-H2 Datasheet v1.3, ESP32-H2-WROOM-02C Datasheet v1.2 (bảng 2, hình 2/4/5) và ESP32-H2 Hardware Design Guidelines.
 > Ký hiệu linh kiện (U1, Q1…) ở đây là tạm thời; GĐ3 sẽ giữ nguyên nếu không có lý do đổi.
 
@@ -91,7 +91,7 @@ Chân module theo hình 2 của datasheet module: chân 1–9 nằm cạnh trái
 | Chân module | GPIO | Net | Hướng | Mức tích cực | Trạng thái lúc reset (DS bảng 2-1) | Kéo ngoài | Khi ngủ (light-sleep TOP PD / deep-sleep) | Ghi chú |
 |---|---|---|---|---|---|---|---|---|
 | 1 | — | **+3V3** | Nguồn | — | — | — | — | Thêm 22 µF + 0,1 µF sát chân. Module đã có 10 µF/1 µF/0,1 µF bên trong. |
-| 2 | EN | **EN** | Vào | Cao = chạy | — | 10 kΩ lên 3V3, 1 µF xuống GND | Luôn cao | RC theo hình 5 của DS module. Có pad pogo. Tuỳ chọn supervisor (DNP). |
+| 2 | EN | **EN** | Vào | Cao = chạy | — | 10 kΩ lên 3V3, 1 µF xuống GND | Luôn cao | RC theo hình 5 của DS module. Có pad pogo. |
 | 3 | GPIO4 | *(dự phòng)* | — | — | thả nổi | — | Firmware cấu hình pull-down | ADC1_CH3 / MTCK. Ra test pad. |
 | 4 | GPIO5 | *(dự phòng)* | — | — | thả nổi | — | Firmware cấu hình pull-down | ADC1_CH4 / MTDI. Ra test pad. |
 | 5 | **GPIO10** | **LEAK_A_N** | Vào | Thấp = ướt | thả nổi | **470 kΩ lên 3V3** | Ngõ vào LP, **EXT1 ANY_LOW** | Drain Q3A, kênh A (điện cực đáy). |
@@ -198,7 +198,7 @@ Chân module theo hình 2 của datasheet module: chân 1–9 nằm cạnh trái
 2. **Pull-up kênh đầu dò là 470 kΩ (không phải 1 MΩ).** Nếu MOSFET rò 1 µA (giới hạn spec xấu nhất), chân vẫn ở 2,8 V, cao hơn ngưỡng V_IH = 0,75 × VDD = 2,48 V.
 3. **Cầu chia 100 kΩ / 100 kΩ, tụ 100 nF.** HW guideline yêu cầu 0,1 µF ở chân ADC. Điện trở nhỏ giúp sai số do dòng rò chân (≤ 50 nA) chỉ khoảng 2,5 mV.
 4. **Jumper đo dòng JP1 trên đường pin**, để đo sàn ngủ ở GĐ6 mà không phải cắt mạch.
-5. **Supervisor reset là tuỳ chọn (DNP):** IQ ≤ 0,2 µA, ngưỡng khoảng 2,9–3,0 V, ngõ ra open-drain kéo EN. HW guideline khuyến nghị cho nguồn pin. Board vẫn chạy được không cần nó, vì TPS63900 giữ 3,3 V tới khi VIN xuống 1,65 V và firmware có backoff khi phát hiện brown-out.
+5. ~~Supervisor reset tuỳ chọn~~: đã bỏ, xem §10.
 
 ## 9. Câu hỏi trước GĐ3
 
@@ -211,4 +211,10 @@ Các câu hỏi này được hỏi trực tiếp trong phiên làm việc. Câu
 
 ## 10. Quyết định đã chốt trước GĐ3
 
-*(sẽ điền sau khi bạn trả lời)*
+| # | Câu hỏi | Quyết định (2026-11-12) | Hệ quả cho GĐ3–4 |
+|---|---|---|---|
+| 1 | Phiên bản KiCad | **KiCad 9** | Sinh file định dạng KiCad 9. Chạy ERC/DRC và xuất Gerber/BOM/CPL bằng `kicad-cli` 9. |
+| 2 | Đầu nối J2 | **JST-PH 2.0 mm**, 2 chân | Chọn loại cắm ngang THT (S2B-PH-K-S) để dây ra cạnh vỏ và dễ hàn tay. |
+| 3 | Lắp ráp | **Tự hàn tay toàn bộ** | Thụ động **0603** (tụ 22 µF dùng 0805). MOSFET **SOT-23 đơn**. TVS **SOD-323**. Đế CR123A và JST loại **THT**. TPS63900 (WSON-10, chỉ có vỏ này) cần khò nóng hoặc bếp hàn: footprint kéo dài pad và đặt via ở pad nhiệt để hàn từ mặt dưới. EPAD của module cũng có lỗ hàn từ mặt dưới. BOM vẫn kèm mã LCSC để đặt linh kiện; CPL vẫn xuất để dùng nếu sau này muốn cho JLCPCB lắp. |
+| 4 | LED | **1 LED đỏ/cam** (AlInGaP, Vf ≈ 2 V) | GPIO22 vẫn để dự phòng. |
+| — | Supervisor reset | **Bỏ** (không cả footprint DNP) | TPS63900 tắt đột ngột ở UVLO, không có sườn xuống chậm. EN đã có RC. Firmware dùng brown-out detector và backoff. |
