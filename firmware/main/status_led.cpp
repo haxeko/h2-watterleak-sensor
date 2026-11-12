@@ -27,11 +27,16 @@ static const led_step_t k_reset_armed[] = {{50, 50}, {50, 50}, {50, 50}, {50, 50
                                            {50, 50}, {50, 50}, {50, 50}, {50, 50}, {50, 50}};
 static const led_step_t k_factory_reset[] = {{1000, 100}};
 static const led_step_t k_identify_effect[] = {{500, 200}};
+static const led_step_t k_link_1[] = {{150, 250}};
+static const led_step_t k_link_2[] = {{150, 250}, {150, 250}};
+static const led_step_t k_link_3[] = {{150, 250}, {150, 250}, {150, 250}};
+static const led_step_t k_no_link[] = {{800, 200}};
 
 #define SEQ(a) {a, (uint8_t)(sizeof(a) / sizeof(a[0]))}
 static const led_seq_t k_patterns[LED_PAT_COUNT] = {
     SEQ(k_ok), SEQ(k_connected), SEQ(k_low_battery), SEQ(k_leak_status),
     SEQ(k_hold_warning), SEQ(k_reset_armed), SEQ(k_factory_reset), SEQ(k_identify_effect),
+    SEQ(k_link_1), SEQ(k_link_2), SEQ(k_link_3), SEQ(k_no_link),
 };
 
 /* background modes: on / off times */

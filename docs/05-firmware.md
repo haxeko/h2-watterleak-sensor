@@ -120,7 +120,17 @@ Kênh nào ướt (A = răng lược đáy, B = đầu dò rời) chỉ được
 
 ## 5. Nút và LED (FR-07, FR-09..FR-11)
 
-Bảng thao tác nằm ở [firmware/README.md](../firmware/README.md#nút-và-led). Ba điểm thiết kế:
+Bảng thao tác nằm ở [firmware/README.md](../firmware/README.md#nút-và-led).
+
+**Nhấn ngắn khi khô và pin còn tốt:** LED nháy 1–3 lần theo chất lượng liên kết tới router cha (`mLinkQualityIn` của OpenThread).
+- 3 nháy: biên liên kết ≥ 20 dB.
+- 2 nháy: ≥ 10 dB.
+- 1 nháy: ≥ 2 dB.
+- 1 nháy dài: chưa bám được router.
+
+RSSI trung bình được ghi ra log, cả khi nhấn nút lẫn mỗi 6 giờ. Tính năng này phục vụ thử tầm ở GĐ6 và giúp chọn chỗ đặt khi lắp.
+
+Ba điểm thiết kế:
 - **Factory reset chạy lúc thả nút** (sau khi đã giữ ≥ 10 s), không chạy lúc đang giữ. GPIO9 là chân strap BOOT; nếu reboot trong lúc nút còn bị giữ, chip sẽ vào ROM download mode.
 - **Nút kẹt** (chốt bấm của vỏ bị kẹt): giữ quá 30 s thì firmware bỏ qua. Trong lúc đó nút chỉ được kiểm tra mỗi 1 s, không nằm trong mask EXT1. Nhờ vậy nút kẹt không giữ chip thức liên tục.
 - **Khi gỡ thiết bị khỏi controller cuối cùng** (fabric cuối bị xoá): thiết bị tự factory reset. Thread credentials bị xoá và BLE commissioning mở lại như lúc mới mua. Tắt được bằng `APP_FACTORY_RESET_ON_LAST_FABRIC_REMOVED`.

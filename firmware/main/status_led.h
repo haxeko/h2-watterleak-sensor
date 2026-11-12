@@ -11,7 +11,7 @@
 #include "esp_err.h"
 
 typedef enum {
-    LED_PAT_OK = 0,          /* 1 x 80 ms: dry, battery fine                         */
+    LED_PAT_OK = 0,          /* 1 x 80 ms: dry, battery fine (no link information)    */
     LED_PAT_CONNECTED,       /* 3 short blinks: commissioning complete               */
     LED_PAT_LOW_BATTERY,     /* 2 x 40 ms, then 2 x 40 ms after a pause              */
     LED_PAT_LEAK_STATUS,     /* 5 fast blinks: currently wet                          */
@@ -19,6 +19,10 @@ typedef enum {
     LED_PAT_RESET_ARMED,     /* fast flicker from 10 s: release now to factory reset  */
     LED_PAT_FACTORY_RESET,   /* 1 s on: reset in progress                             */
     LED_PAT_IDENTIFY_EFFECT, /* 1 x 500 ms: Identify TriggerEffect                    */
+    LED_PAT_LINK_1,          /* short press, all fine: 1..3 blinks = Thread link quality */
+    LED_PAT_LINK_2,
+    LED_PAT_LINK_3,
+    LED_PAT_NO_LINK,         /* 1 x 800 ms: not attached to a Thread parent            */
     LED_PAT_COUNT
 } led_pattern_t;
 

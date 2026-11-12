@@ -9,6 +9,7 @@
 #include <esp_openthread_lock.h>
 #include <esp_openthread_types.h>
 #include <openthread/platform/radio.h>
+#include <openthread/thread.h>
 
 #include <app/clusters/boolean-state-server/BooleanStateCluster.h>
 #include <app/server/CommissioningWindowManager.h>
@@ -222,4 +223,25 @@ void app_matter_notify_user_activity(void)
 void app_matter_factory_reset(void)
 {
     esp_matter::factory_reset();   /* erases Matter + Thread settings, then restarts */
+}
+
+bool app_matter_get_parent_link(int8_t *avg_rssi_dbm, uint8_t *link_quality)
+{
+    bool ok = false;
+    if (!esp_openthread_lock_acquire(pdMS_TO_TICKS(100))) {
+        return false;
+    }
+    otInstance *ot = esp_openthread_get_instance();
+    otRouterInfo parent;
+    if (ot && otThreadGetDeviceRole(ot) == OT_DEVICE_ROLE_CHILD && otThreadGetParentInfo(ot, &parent) == OT_ERROR_NONE) {
+        int8_t rssi = 0;
+        if (otThreadGetParentAverageRssi(ot, &rssi) != OT_ERROR_NONE) {
+            otThreadGetParentLastRssi(ot, &rssi);
+        }
+        *avg_rssi_dbm = rssi;
+        *link_quality = parent.mLinkQualityIn;
+        ok = true;
+    }
+    esp_openthread_lock_release();
+    return ok;
 }

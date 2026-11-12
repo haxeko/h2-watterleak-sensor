@@ -56,12 +56,23 @@ void app_on_short_press(void)
         return;
     }
     app_matter_notify_user_activity();      /* stay reachable for ActiveModeDuration */
+    int8_t rssi = 0;
+    uint8_t lq = 0;
+    const bool attached = app_matter_get_parent_link(&rssi, &lq);
+    if (attached) {
+        ESP_LOGI(TAG, "Thread parent: avg RSSI %d dBm, link quality %u/3", rssi, (unsigned)lq);
+    } else {
+        ESP_LOGW(TAG, "not attached to a Thread parent");
+    }
     if (leak_probe_is_wet()) {
         status_led_play(LED_PAT_LEAK_STATUS);
     } else if (battery_is_low()) {
         status_led_play(LED_PAT_LOW_BATTERY);
+    } else if (!attached) {
+        status_led_play(LED_PAT_NO_LINK);
     } else {
-        status_led_play(LED_PAT_OK);
+        /* phase 6 range test / installation aid: 1..3 blinks = link quality to the parent router */
+        status_led_play(lq >= 3 ? LED_PAT_LINK_3 : (lq == 2 ? LED_PAT_LINK_2 : LED_PAT_LINK_1));
     }
     app_event_post(APP_EVT_BATTERY_MEASURE, 0);
 }
@@ -87,9 +98,15 @@ static void app_task(void *)
         case APP_EVT_BUTTON_TICK:
             button_on_tick();
             break;
-        case APP_EVT_BATTERY_MEASURE:
+        case APP_EVT_BATTERY_MEASURE: {
             battery_measure_and_report();
+            int8_t rssi = 0;
+            uint8_t lq = 0;
+            if (app_matter_get_parent_link(&rssi, &lq)) {          /* soak-test log, every 6 h */
+                ESP_LOGI(TAG, "Thread parent: avg RSSI %d dBm, link quality %u/3", rssi, (unsigned)lq);
+            }
             break;
+        }
         case APP_EVT_FACTORY_RESET:
             ESP_LOGW(TAG, "factory reset (%s)", evt.arg ? "last fabric removed" : "button");
             status_led_play(LED_PAT_FACTORY_RESET);

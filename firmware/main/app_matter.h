@@ -19,3 +19,7 @@ bool app_matter_is_commissioned(void);
 void app_matter_open_commissioning_window(uint16_t seconds);
 void app_matter_notify_user_activity(void);  /* ICD: enter active mode now (button press) */
 void app_matter_factory_reset(void);
+
+/* Thread link to the parent router (phase 6 range test). false when not attached as a child.
+ * link_quality: OpenThread 0..3 (3: link margin >= 20 dB, 2: >= 10 dB, 1: >= 2 dB). */
+bool app_matter_get_parent_link(int8_t *avg_rssi_dbm, uint8_t *link_quality);

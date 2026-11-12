@@ -106,7 +106,7 @@ chip-tool identify identify 10 0x7283 1                       # LED nháy 10 s
 | Thao tác | Kết quả |
 |---|---|
 | Nhấn ngắn, chưa ghép | Mở cửa sổ commissioning 15 phút. LED nháy 50 ms mỗi 2 s. |
-| Nhấn ngắn, đã ghép | LED báo trạng thái: 1 nháy = ổn; 5 nháy nhanh = đang ướt; nháy đôi = pin yếu. Đồng thời đo lại pin, và ICD vào active mode. |
+| Nhấn ngắn, đã ghép | LED báo trạng thái. Đồng thời đo lại pin và ICD vào active mode.<br>• 5 nháy nhanh: đang ướt.<br>• Nháy đôi: pin yếu.<br>• 1 nháy dài: chưa bám được router Thread.<br>• 1–3 nháy: chất lượng liên kết tới router cha (3 = tốt). Dùng khi chọn chỗ đặt, xem [docs/06](../docs/06-ke-hoach-test.md). |
 | Giữ 5 s | LED nháy 2 lần dài: cảnh báo sắp reset. |
 | Giữ ≥ 10 s rồi **thả** | LED nhấp nháy nhanh từ giây thứ 10. Khi thả: factory reset. Reset chỉ chạy lúc thả vì GPIO9 là chân strap BOOT. |
 | Giữ > 30 s | Coi là kẹt nút. Bỏ qua cho tới khi nút được thả ra. |
