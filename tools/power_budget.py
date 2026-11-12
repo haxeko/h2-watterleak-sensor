@@ -105,7 +105,7 @@ class Scenario:
     batt_meas_period_s: float = 6 * 3600.0
     # yearly events, expressed at the 3.3 V rail
     leak_events_per_year: float = 2.0
-    buzzer: bool = True
+    buzzer: bool = False              # decision Q3: no buzzer fitted
     ota_per_year: float = 1.0
     ota_mah: float = 2.3               # ~1.5 MB image over Thread BDX + flash programming (estimate)
     commissioning_mah: float = 3.0     # BLE advertising + PASE/CASE + Thread join, once
@@ -232,9 +232,10 @@ def print_report() -> None:
         print(f"| 1 Thread data poll @ {dbm:+d} dBm | {fmt(q)} µC |")
     print(f"| 1 báo cáo Matter (ReportData + Active Mode + ACK) | {fmt(s.q_report_uc() / 1e3, 2)} mC |")
     print(f"| 1 lần làm mới SRP | {fmt(s.q_srp_uc() / 1e3, 2)} mC |")
-    print(f"| 1 sự kiện rò rỉ 1 h, có buzzer | {fmt(s.q_leak_event_mc() / 3600, 2)} mAh |")
-    print(f"| 1 sự kiện rò rỉ 1 h, không buzzer | "
+    print(f"| 1 sự kiện rò rỉ 1 h (LED + đo xung + 4 báo cáo) | "
           f"{fmt(replace(s, buzzer=False).q_leak_event_mc() / 3600, 3)} mAh |")
+    print(f"| *(tham khảo) như trên nếu có buzzer* | "
+          f"{fmt(replace(s, buzzer=True).q_leak_event_mc() / 3600, 2)} mAh |")
     print()
 
     for sc in (OPTIMISTIC, TYPICAL, PESSIMISTIC):

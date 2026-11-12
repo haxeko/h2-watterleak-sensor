@@ -1,6 +1,6 @@
 # Giai đoạn 1 — Yêu cầu & ngân sách dòng điện
 
-> **Trạng thái:** BẢN NHÁP, còn chờ chốt 4 quyết định ở [§9](#9-quyết-định-cần-chốt).
+> **Trạng thái:** ĐÃ CHỐT (2026-11-12). Các quyết định nằm ở [§9](#9-quyết-định-đã-chốt): **CR123A**, **ESP32-H2-WROOM-02C-H4S**, **không có buzzer**, **2 kênh đầu dò riêng**.
 > Mọi con số dòng/tuổi thọ được sinh ra bởi [`tools/power_budget.py`](../tools/power_budget.py).
 > Tới Giai đoạn 6, đo dòng thật rồi chạy lại với `--floor <µA đo được>` để cập nhật.
 
@@ -10,7 +10,8 @@
 |---|---|
 | Kiến trúc ngủ | Matter **ICD dạng SIT** chạy trên **Thread Sleepy End Device**. Chip ngủ **light-sleep có power-down CPU và peripheral**. Vận hành bình thường không dùng deep-sleep (lý do ở §3). Phần cứng vẫn đánh thức được từ deep-sleep qua LP GPIO (EXT1) như yêu cầu. |
 | Dòng trung bình @3,3 V | **≈ 34 µA** điển hình, 27 µA lạc quan, 52 µA bi quan. Khoảng 74 % là dòng sàn light-sleep của chip (25 µA theo datasheet), nên tối ưu chu kỳ poll chỉ cải thiện được có giới hạn. |
-| Tuổi thọ pin (điển hình / bi quan) | **CR123A ≈ 3,4 / 2,2 năm** · 2×AAA lithium ≈ 3,0 / 2,0 · 2×AAA alkaline ≈ 2,1 / 1,4 · *(2×AA alkaline ≈ 4,5 / 3,0 để tham khảo)* |
+| Tuổi thọ pin (điển hình / bi quan) | **CR123A (đã chọn) ≈ 3,4 / 2,2 năm**, lạc quan 4,2 năm. Các phương án đã loại để so sánh: 2×AAA lithium ≈ 3,0 / 2,0 · 2×AAA alkaline ≈ 2,1 / 1,4 · 2×AA alkaline ≈ 4,5 / 3,0. |
+| Báo động tại chỗ | **Không có buzzer** (Q3). Báo động qua Matter (thông báo trên Apple Home / HA) và LED. |
 | Nguồn | **TPS63900** buck-boost (IQ 75 nA, VIN 1,8–5,5 V, hiệu suất ≈ 85–91 % ở tải 10 µA) cấp 3,3 V. Thêm P-MOSFET chống ngược cực. |
 | Đầu dò | Điện cực được phân cực bằng LP GPIO, qua MOSFET Vth thấp, pull-down 1 MΩ. **Khi khô, dòng qua điện cực = 0.** Khi ướt, MOSFET kéo LP GPIO xuống mức thấp để đánh thức chip. Sau đó firmware **bỏ phân cực và chuyển sang đo xung**, duty dưới 0,1 %. |
 | Module | **Không có ESP32-H2-WROOM-01.** Chọn giữa **WROOM-02C-H4S** (đề xuất) và **MINI-1-H4S**. Bắt buộc bản **4 MB** flash để làm OTA. |
@@ -27,13 +28,13 @@
 | FR-02 | Báo ngay khi có nước. | Từ lúc nước chạm điện cực đến lúc gói Matter rời anten ≤ **1 s** (đã gồm debounce). |
 | FR-03 | Chống báo giả. | Chỉ xác nhận "ướt" khi có 3 mẫu ướt liên tiếp, cách nhau ≥ 100 ms. Chỉ về "khô" khi khô liên tục ≥ 30 s (cấu hình được). Điện cực ngắn mạch thoáng qua < 200 ms thì không báo. |
 | FR-04 | Chống điện phân và ăn mòn. | Khi khô: dòng qua điện cực ≈ 0 (chỉ còn rò nA). Khi ướt: dòng DC ≤ 3,3 µA (giới hạn bởi 1 MΩ), sau đó firmware chuyển sang đo xung ≤ 2 ms mỗi 10 s. |
-| FR-05 | Matter device type **Water Leak Detector (0x0043)** trên EP1. | Có Identify và Boolean State (`StateValue` = TRUE khi rò, kèm sự kiện `StateChange`). Thêm Boolean State Configuration (Visual/Audible/AlarmSuppress) nếu có buzzer. |
+| FR-05 | Matter device type **Water Leak Detector (0x0043)** trên EP1. | Có Identify và Boolean State (`StateValue` = TRUE khi rò, kèm sự kiện `StateChange`). Boolean State Configuration là tuỳ chọn, chỉ với feature Visual (LED), vì không có buzzer. |
 | FR-06 | **Power Source** (feature BAT). | Có các thuộc tính `BatVoltage`, `BatPercentRemaining`, `BatChargeLevel`, `BatReplacementNeeded`, `BatReplaceability`, `BatReplacementDescription`, `BatQuantity`. % pin ước tính từ điện áp có tải kết hợp bộ đếm năng lượng trong firmware, vì CR123A có đường xả rất phẳng. |
-| FR-07 | Cảnh báo pin yếu. | `BatChargeLevel` = Warning khi ≤ 15 %, Critical khi ≤ 5 % (ngưỡng điện áp theo loại pin). Gửi qua subscription. Nếu có buzzer thì kêu "chíp" 12 h/lần. |
+| FR-07 | Cảnh báo pin yếu. | `BatChargeLevel` = Warning khi ≤ 15 %, Critical khi ≤ 5 % (ngưỡng điện áp cho CR123A). Gửi qua subscription. Tại chỗ: LED nháy mẫu "pin yếu" mỗi khi bấm nút hoặc khi có sự kiện. |
 | FR-08 | ICD server. | Có ICD Management cluster. Tham số theo §7. Ngủ light-sleep giữa các lần poll. |
 | FR-09 | Commissioning qua BLE, dùng một nút. | Nhấn ngắn: Identify / hiện trạng thái, hoặc mở lại cửa sổ commissioning nếu chưa vào fabric. Giữ 5 s: LED cảnh báo. Giữ 10 s: factory reset. |
 | FR-10 | 1 LED trạng thái. | LED chỉ sáng khi có sự kiện (commissioning, kết nối xong, rò, pin yếu, reset). Không nháy "heartbeat" định kỳ. |
-| FR-11 | Buzzer (tuỳ chọn). | Báo động tại chỗ, kêu được cả khi mất mạng. Tắt bằng nút hoặc lệnh AlarmSuppress. Thời lượng có giới hạn (§6.3). |
+| FR-11 | ~~Buzzer~~: loại bỏ theo quyết định Q3. | Không có báo động âm thanh tại chỗ. Khi rò, LED nháy mẫu "rò" (20 ms mỗi 3 s) cho tới khi khô hoặc tối đa 1 h. |
 | FR-12 | OTA Matter (OTA Requestor). | Flash 4 MB, 2 phân vùng app. |
 | FR-13 | Tương thích controller. | Apple Home: iOS/tvOS ≥ 18.4 đã hiển thị Matter leak sensor. Home Assistant: Matter integration + OTBR. Multi-admin ≥ 2 fabric. |
 | FR-14 | Nạp và debug. | Pad pogo: 3V3, GND, EN, IO9/BOOT, TXD0, RXD0, USB D−/D+. |
@@ -136,7 +137,7 @@ TVS 2 chiều, dòng rò thấp, trên E1/E2 của cổng đầu dò rời
   - Child supervision 129 s (mặc định OpenThread, mỗi lần nhận thêm 1 frame).
   - Làm mới SRP 2 h/lần (3 frame + chữ ký ECDSA 60 ms).
 - **Sự kiện theo năm:**
-  - 2 lần rò mỗi năm, mỗi lần 1 h ướt. Buzzer kêu 1 phút ở duty 50 % @ 35 mA, sau đó "chíp" 0,2 s mỗi 30 s.
+  - 2 lần rò mỗi năm, mỗi lần 1 h ướt: 4 báo cáo Matter, đo xung 10 s/lần, LED 20 ms @ 3 mA mỗi 3 s. Không có buzzer.
   - 1 OTA/năm ≈ 2,3 mAh.
   - Commissioning một lần ≈ 3 mAh.
 - **Pin:**
@@ -159,8 +160,8 @@ TVS 2 chiều, dòng rò thấp, trên E1/E2 của cổng đầu dò rời
 | 1 Thread data poll @ +20 dBm | 173.8 µC |
 | 1 báo cáo Matter (ReportData + Active Mode + ACK) | 1.47 mC |
 | 1 lần làm mới SRP | 2.39 mC |
-| 1 sự kiện rò rỉ 1 h, có buzzer | 0.55 mAh |
-| 1 sự kiện rò rỉ 1 h, không buzzer | 0.024 mAh |
+| 1 sự kiện rò rỉ 1 h (LED + đo xung + 4 báo cáo) | 0.024 mAh |
+| *(tham khảo) như trên nếu có buzzer* | 0.55 mAh |
 
 ### 6.4 Phân rã dòng trung bình @3,3 V
 
@@ -174,7 +175,7 @@ TVS 2 chiều, dòng rò thấp, trên E1/E2 của cổng đầu dò rời
 | Làm mới SRP | 0.27 | **0.33** | 0.35 |
 | Đo pin (6 h/lần) | 0.00 | **0.00** | 0.00 |
 | **Tổng (µA)** | **26.9** | **34.0** | **52.3** |
-| Sự kiện theo năm (rò, OTA), mAh/năm | 2.8 | 3.4 | 7.9 |
+| Sự kiện theo năm (rò, OTA), mAh/năm | 2.3 | 2.3 | 4.8 |
 
 ### 6.5 Tuổi thọ pin ước tính (năm)
 
@@ -196,7 +197,7 @@ Leak và battery đều là báo cáo **do thiết bị khởi phát**: chip th�
 
 | Chế độ | Slow poll | Trễ lệnh controller→thiết bị (tối đa) | Dòng TB @3,3 V | CR123A | 2×AAA alkaline |
 |---|---:|---:|---:|---:|---:|
-| SIT | 5 s | 5 s | 47.6 µA | 2.4 năm | 1.5 năm |
+| SIT | 5 s | 5 s | 47.6 µA | 2.4 năm | 1.6 năm |
 | SIT | 10 s | 10 s | 37.4 µA | 3.1 năm | 1.9 năm |
 | **SIT** | **15 s** | **15 s** | **34.0 µA** | **3.4 năm** | **2.1 năm** |
 | LIT | 30 s | 30 s | 30.6 µA | 3.7 năm | 2.3 năm |
@@ -214,7 +215,7 @@ Leak và battery đều là báo cáo **do thiết bị khởi phát**: chip th�
 | TX 0 dBm | 32.2 µA | 3.5 năm |
 | TX +20 dBm | 39.8 µA | 2.9 năm |
 | Không lắp XTAL 32 kHz (hiệu chuẩn RC mỗi chu kỳ ngủ) | 37.3 µA | 3.1 năm |
-| IdleModeDuration 15 phút thay vì 1 h | 36.4 µA | 3.1 năm |
+| IdleModeDuration 15 phút thay vì 1 h | 36.4 µA | 3.2 năm |
 | Fast poll 500 ms thay vì 200 ms | 33.8 µA | 3.4 năm |
 | **Lỗi FW: peripheral không power-down khi ngủ (sàn 85 µA)** | **94.0 µA** | **1.2 năm** |
 
@@ -259,19 +260,19 @@ Leak và battery đều là báo cáo **do thiết bị khởi phát**: chip th�
 - GPIO0, 1, 10–14, 22 không có pull khi reset.
 
 **Hành vi khi ngủ:**
-- Chân digital (GPIO0–5, 22–27) mất trạng thái khi TOP power-down. Mọi ngõ ra như buzzer hay công tắc cầu chia vì vậy phải **mặc định tắt bằng điện trở kéo ngoài**.
+- Chân digital (GPIO0–5, 22–27) mất trạng thái khi TOP power-down. Mọi ngõ ra digital (ví dụ công tắc cầu chia đo pin) vì vậy phải **mặc định tắt bằng điện trở kéo ngoài**.
 - Pull nội không giữ được khi RTC peripheral tắt. Các ngõ vào đánh thức (nút, sense) cần **pull-up ngoài**.
 
-## 9. Quyết định cần chốt
+## 9. Quyết định đã chốt
 
-| # | Câu hỏi | Đề xuất |
-|---|---|---|
-| Q1 | Loại pin | **CR123A** |
-| Q2 | Module | **ESP32-H2-WROOM-02C-H4S** (chân castellated, hàn tay được, 4 MB) |
-| Q3 | Buzzer | Có (buzzer từ, lắp sẵn) |
-| Q4 | Kênh đầu dò | 2 kênh: điện cực đáy + cổng đầu dò rời. Firmware gộp OR vào 1 endpoint |
+| # | Câu hỏi | Quyết định (2026-11-12) | Hệ quả |
+|---|---|---|---|
+| Q1 | Loại pin | **CR123A** (1 cell Li-MnO2) | Tuổi thọ ≈ 3,4 năm điển hình, 2,2 năm bi quan. VBAT ≤ 3,3 V nên cầu chia đo pin không bao giờ đưa áp vượt VDD lên chân ADC. |
+| Q2 | Module | **ESP32-H2-WROOM-02C-H4S** | 20×18×3,2 mm, 4 MB, chân castellated. Mạch RC 10 kΩ/1 µF cho EN đã có sẵn trong module. |
+| Q3 | Buzzer | **Không** | Bỏ FR-11. Tiết kiệm 1 GPIO và 1 MOSFET. Boolean State Configuration chỉ còn Visual, hoặc bỏ. |
+| Q4 | Kênh đầu dò | **2 kênh riêng**: A = điện cực đáy (2 vùng song song), B = cổng đầu dò rời | Mỗi kênh 1 LP GPIO sense, dùng chung PROBE_EXC. Firmware gộp OR vào 1 endpoint Water Leak (có thể tách sau). |
 
-**Mặc định đề xuất** (không cần trả lời nếu đồng ý):
+**Mặc định đang áp dụng** (bạn có thể đổi bất cứ lúc nào):
 - KiCad 9.
 - JLCPCB: 2 lớp, FR4 1,6 mm, **ENIG** (bắt buộc cho điện cực).
 - ESP-IDF: bản mà esp-matter release ổn định mới nhất yêu cầu (kiểm lại ở GĐ5).
