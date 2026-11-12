@@ -1,0 +1,112 @@
+(footprint "L_Sunlord_WPN4020H_HandSolder"
+	(version 20241229)
+	(generator "pcbnew")
+	(generator_version "9.0")
+	(layer "F.Cu")
+	(descr "Sunlord WPN4020H 4.0x4.0x2.0 mm power inductor, land pattern a=1.9 b=1.1 c=3.7 with pads extended outward for hand soldering")
+	(tags "inductor 4020 Sunlord WPN4020H")
+	(property "Reference" "REF**"
+		(at 0 -3.2 0)
+		(layer "F.SilkS")
+		(uuid "44d5ed85-f11a-5abd-b9d6-d4605244fb1a")
+		(effects
+			(font
+				(size 1 1)
+				(thickness 0.15)
+			)
+		)
+	)
+	(property "Value" "L_Sunlord_WPN4020H_HandSolder"
+		(at 0 3.2 0)
+		(layer "F.Fab")
+		(uuid "9ab189fb-cf2c-57d8-829f-3e1fb4a4f923")
+		(effects
+			(font
+				(size 1 1)
+				(thickness 0.15)
+			)
+		)
+	)
+	(property "Datasheet" ""
+		(at 0 0 0)
+		(layer "F.Fab")
+		(hide yes)
+		(uuid "57ba9582-8019-537a-9be5-d1bc04f2b0c8")
+		(effects
+			(font
+				(size 1 1)
+				(thickness 0.15)
+			)
+		)
+	)
+	(property "Description" ""
+		(at 0 0 0)
+		(layer "F.Fab")
+		(hide yes)
+		(uuid "b7832213-8a2d-51a8-b8cc-84cda2fddd2c")
+		(effects
+			(font
+				(size 1 1)
+				(thickness 0.15)
+			)
+		)
+	)
+	(attr smd)
+	(pad "1" smd roundrect
+		(at -1.7 0)
+		(size 1.5 3.7)
+		(layers "F.Cu" "F.Mask" "F.Paste")
+		(roundrect_rratio 0.1)
+		(uuid "227f496f-69f3-5efc-babd-6bbc9834aff7")
+	)
+	(pad "2" smd roundrect
+		(at 1.7 0)
+		(size 1.5 3.7)
+		(layers "F.Cu" "F.Mask" "F.Paste")
+		(roundrect_rratio 0.1)
+		(uuid "da4e54e7-3941-504a-b63d-b75316d82748")
+	)
+	(fp_rect
+		(start -2 -2)
+		(end 2 2)
+		(stroke
+			(width 0.1)
+			(type solid)
+		)
+		(fill no)
+		(layer "F.Fab")
+		(uuid "9c3ca89f-932f-56f4-8bd8-f076620a7717")
+	)
+	(fp_line
+		(start -2.1 -2.1)
+		(end 2.1 -2.1)
+		(stroke
+			(width 0.12)
+			(type solid)
+		)
+		(layer "F.SilkS")
+		(uuid "3c432841-0e1c-5f85-84ce-b57e1df78331")
+	)
+	(fp_line
+		(start -2.1 2.1)
+		(end 2.1 2.1)
+		(stroke
+			(width 0.12)
+			(type solid)
+		)
+		(layer "F.SilkS")
+		(uuid "a548777b-bd43-5f76-96d0-5f6b57873060")
+	)
+	(fp_rect
+		(start -2.7 -2.35)
+		(end 2.7 2.35)
+		(stroke
+			(width 0.05)
+			(type solid)
+		)
+		(fill no)
+		(layer "F.CrtYd")
+		(uuid "4fbe3308-5dee-525f-8fe2-58fc16aec27a")
+	)
+	(embedded_fonts no)
+)

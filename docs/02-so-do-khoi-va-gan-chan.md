@@ -146,7 +146,7 @@ Chân module theo hình 2 của datasheet module: chân 1–9 nằm cạnh trái
   │ ARMED_DRY        │ ───────────────► │ CONFIRMING   │ ────────► │ WET                      │
   │ PROBE_EXC=1(hold)│                  │ mẫu 100 ms   │           │ báo StateValue=TRUE      │
   │ ngủ, 0 dòng đầu dò│ ◄─────────────── │              │           │ PROBE_EXC=0 (bỏ phân cực)│
-  └──────────────────┘   mẫu khô (giả)  └──────────────┘           │ đo xung: EXC=1 trong 2 ms│
+  └──────────────────┘   mẫu khô (giả)  └──────────────┘           │ đo xung: EXC=1 trong 5 ms│
                                                                    │ mỗi 10 s, đọc A và B     │
                                                                    └──────────────────────────┘
 ```
@@ -155,7 +155,7 @@ Chân module theo hình 2 của datasheet module: chân 1–9 nằm cạnh trái
 
 | Giao tiếp | Đề xuất | Chân / net |
 |---|---|---|
-| J1 pad nạp | 8 pad hàng thẳng pitch 2,54 mm cho jig pogo; nạp khi đã tháo pin, jig cấp 3,3 V | 1 GND · 2 +3V3 · 3 EN · 4 IO9/BOOT · 5 TXD0 (GPIO24) · 6 RXD0 (GPIO23) · 7 USB_DN (GPIO26) · 8 USB_DP (GPIO27) |
+| J1 pad nạp | 8 pad hàng thẳng pitch 2,54 mm cho jig pogo; nạp khi đã tháo pin, jig cấp 3,3 V | 1 +3V3 · 2 EN · 3 IO9/BOOT · 4 TXD0 (GPIO24) · 5 RXD0 (GPIO23) · 6 USB_DN (GPIO26) · 7 USB_DP (GPIO27) · 8 GND (đổi thứ tự ở GĐ3 để vẽ nguồn gọn hơn) |
 | J2 đầu dò rời | Đầu nối 2 chân (loại sẽ chốt ở câu hỏi trước GĐ3) | 1 = EXC_B (qua 10 kΩ) · 2 = SNS_B |
 | Điện cực kênh A | 2 vùng răng lược ENIG ở 2 đầu mặt đáy, nối song song | EXC_A / SNS_A |
 | JP1 | Jumper hàn, mặc định nối, nằm trên đường pin. Cắt ra để đo dòng (GĐ6) | BAT_RAW |

@@ -1,0 +1,264 @@
+(footprint "Electrode_Comb_12x8mm"
+	(version 20241229)
+	(generator "pcbnew")
+	(generator_version "9.0")
+	(layer "F.Cu")
+	(descr "Interdigitated water-sensing electrode 12.0x8.0 mm, finger 0.5 mm, gap 0.5 mm, exposed copper (order ENIG); place on the bottom side")
+	(tags "water leak electrode comb ENIG")
+	(property "Reference" "REF**"
+		(at 0 -5.2 0)
+		(layer "F.SilkS")
+		(uuid "180111ce-5934-513d-b54a-5d3071c76479")
+		(effects
+			(font
+				(size 1 1)
+				(thickness 0.15)
+			)
+		)
+	)
+	(property "Value" "Electrode_Comb_12x8mm"
+		(at 0 5.2 0)
+		(layer "F.Fab")
+		(uuid "df70f464-bbc5-5463-bef8-f41cccfe3a41")
+		(effects
+			(font
+				(size 1 1)
+				(thickness 0.15)
+			)
+		)
+	)
+	(property "Datasheet" ""
+		(at 0 0 0)
+		(layer "F.Fab")
+		(hide yes)
+		(uuid "9f940563-29c7-5fe0-ab39-41a03576f06e")
+		(effects
+			(font
+				(size 1 1)
+				(thickness 0.15)
+			)
+		)
+	)
+	(property "Description" ""
+		(at 0 0 0)
+		(layer "F.Fab")
+		(hide yes)
+		(uuid "6c40c0c6-67c7-5715-a69f-662ca6a11926")
+		(effects
+			(font
+				(size 1 1)
+				(thickness 0.15)
+			)
+		)
+	)
+	(attr smd)
+	(pad "1" smd custom
+		(at 0 -3.6)
+		(size 0.5 0.5)
+		(layers "F.Cu" "F.Mask")
+		(options
+			(clearance outline)
+			(anchor rect)
+		)
+		(primitives
+			(gr_poly
+				(pts
+					(xy -6 -0.4)
+					(xy 6 -0.4)
+					(xy 6 0.4)
+					(xy -6 0.4)
+				)
+				(width 0)
+				(fill yes)
+			)
+			(gr_poly
+				(pts
+					(xy -6 0.4)
+					(xy -5.5 0.4)
+					(xy -5.5 6.3)
+					(xy -6 6.3)
+				)
+				(width 0)
+				(fill yes)
+			)
+			(gr_poly
+				(pts
+					(xy -4 0.4)
+					(xy -3.5 0.4)
+					(xy -3.5 6.3)
+					(xy -4 6.3)
+				)
+				(width 0)
+				(fill yes)
+			)
+			(gr_poly
+				(pts
+					(xy -2 0.4)
+					(xy -1.5 0.4)
+					(xy -1.5 6.3)
+					(xy -2 6.3)
+				)
+				(width 0)
+				(fill yes)
+			)
+			(gr_poly
+				(pts
+					(xy 0 0.4)
+					(xy 0.5 0.4)
+					(xy 0.5 6.3)
+					(xy 0 6.3)
+				)
+				(width 0)
+				(fill yes)
+			)
+			(gr_poly
+				(pts
+					(xy 2 0.4)
+					(xy 2.5 0.4)
+					(xy 2.5 6.3)
+					(xy 2 6.3)
+				)
+				(width 0)
+				(fill yes)
+			)
+			(gr_poly
+				(pts
+					(xy 4 0.4)
+					(xy 4.5 0.4)
+					(xy 4.5 6.3)
+					(xy 4 6.3)
+				)
+				(width 0)
+				(fill yes)
+			)
+		)
+		(uuid "ae1a6f03-52b4-52a5-9370-ef759da2fad5")
+	)
+	(pad "2" smd custom
+		(at 0 3.6)
+		(size 0.5 0.5)
+		(layers "F.Cu" "F.Mask")
+		(options
+			(clearance outline)
+			(anchor rect)
+		)
+		(primitives
+			(gr_poly
+				(pts
+					(xy -6 -0.4)
+					(xy 6 -0.4)
+					(xy 6 0.4)
+					(xy -6 0.4)
+				)
+				(width 0)
+				(fill yes)
+			)
+			(gr_poly
+				(pts
+					(xy -5 -6.3)
+					(xy -4.5 -6.3)
+					(xy -4.5 -0.4)
+					(xy -5 -0.4)
+				)
+				(width 0)
+				(fill yes)
+			)
+			(gr_poly
+				(pts
+					(xy -3 -6.3)
+					(xy -2.5 -6.3)
+					(xy -2.5 -0.4)
+					(xy -3 -0.4)
+				)
+				(width 0)
+				(fill yes)
+			)
+			(gr_poly
+				(pts
+					(xy -1 -6.3)
+					(xy -0.5 -6.3)
+					(xy -0.5 -0.4)
+					(xy -1 -0.4)
+				)
+				(width 0)
+				(fill yes)
+			)
+			(gr_poly
+				(pts
+					(xy 1 -6.3)
+					(xy 1.5 -6.3)
+					(xy 1.5 -0.4)
+					(xy 1 -0.4)
+				)
+				(width 0)
+				(fill yes)
+			)
+			(gr_poly
+				(pts
+					(xy 3 -6.3)
+					(xy 3.5 -6.3)
+					(xy 3.5 -0.4)
+					(xy 3 -0.4)
+				)
+				(width 0)
+				(fill yes)
+			)
+			(gr_poly
+				(pts
+					(xy 5 -6.3)
+					(xy 5.5 -6.3)
+					(xy 5.5 -0.4)
+					(xy 5 -0.4)
+				)
+				(width 0)
+				(fill yes)
+			)
+		)
+		(uuid "56b4a6fc-7bee-5836-9b3f-5bb48406ec5d")
+	)
+	(fp_rect
+		(start -6 -4)
+		(end 6 4)
+		(stroke
+			(width 0.1)
+			(type solid)
+		)
+		(fill no)
+		(layer "F.Fab")
+		(uuid "d589e6ab-5661-5ae7-9181-7c64123001e8")
+	)
+	(fp_rect
+		(start -6.3 -4.3)
+		(end 6.3 4.3)
+		(stroke
+			(width 0.05)
+			(type solid)
+		)
+		(fill no)
+		(layer "F.CrtYd")
+		(uuid "49b16f50-e73a-5e03-bbf4-2b843619c0bd")
+	)
+	(fp_text user "EXC"
+		(at -7.6 -3.6 0)
+		(layer "F.Fab")
+		(uuid "970aac4f-734d-5799-b017-79e38cfa9510")
+		(effects
+			(font
+				(size 0.6 0.6)
+				(thickness 0.12)
+			)
+		)
+	)
+	(fp_text user "SNS"
+		(at -7.6 3.6 0)
+		(layer "F.Fab")
+		(uuid "486341b5-bd53-592a-b9be-164f23f80fc9")
+		(effects
+			(font
+				(size 0.6 0.6)
+				(thickness 0.12)
+			)
+		)
+	)
+	(embedded_fonts no)
+)

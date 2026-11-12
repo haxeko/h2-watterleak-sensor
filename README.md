@@ -9,8 +9,8 @@ Thiết bị dùng được với Apple Home và Home Assistant thông qua Threa
 |---|---|---|---|
 | 1 | Yêu cầu & ngân sách dòng | [docs/01-yeu-cau-va-ngan-sach-dong.md](docs/01-yeu-cau-va-ngan-sach-dong.md) | ✅ Đã chốt |
 | 2 | Sơ đồ khối + gán chân GPIO | [docs/02-so-do-khoi-va-gan-chan.md](docs/02-so-do-khoi-va-gan-chan.md) | ✅ Đã chốt |
-| 3 | Sơ đồ nguyên lý (KiCad) | — | Chưa bắt đầu |
-| 4 | Layout PCB, DRC, BOM, CPL | — | Chưa bắt đầu |
+| 3 | Sơ đồ nguyên lý (KiCad 9) | [docs/03-so-do-nguyen-ly.md](docs/03-so-do-nguyen-ly.md) · [PDF](hardware/h2-leak-sensor/h2-leak-sensor_schematic.pdf) · [project](hardware/) | ✅ Xong, ERC 0 lỗi |
+| 4 | Layout PCB, DRC, BOM, CPL | — | Chờ chốt kích thước và vỏ |
 | 5 | Firmware (ESP-IDF + esp-matter) | — | Chưa bắt đầu |
 | 6 | Kế hoạch test (dòng ngủ, thử nước, tầm Thread) | — | Chưa bắt đầu |
 

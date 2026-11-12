@@ -1,0 +1,10 @@
+# KiCad temporary / per-user files
+*.kicad_prl
+*-backups/
+fp-info-cache
+_autosave-*
+*.lck
+~*.lck
+# Python
+__pycache__/
+*.pyc

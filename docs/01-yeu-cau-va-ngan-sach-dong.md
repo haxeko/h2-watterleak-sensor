@@ -27,7 +27,7 @@
 | FR-01 | Phát hiện nước bằng điện cực răng lược ENIG ở mặt đáy PCB (2 vùng) và cổng đầu dò rời. | Kích khi điện trở giữa hai điện cực < ~1 MΩ (ngưỡng tuỳ Vth MOSFET, xem §5). Phát hiện được nước máy, nước mưa, nước RO. Độ ẩm không ngưng tụ không gây kích. |
 | FR-02 | Báo ngay khi có nước. | Từ lúc nước chạm điện cực đến lúc gói Matter rời anten ≤ **1 s** (đã gồm debounce). |
 | FR-03 | Chống báo giả. | Chỉ xác nhận "ướt" khi có 3 mẫu ướt liên tiếp, cách nhau ≥ 100 ms. Chỉ về "khô" khi khô liên tục ≥ 30 s (cấu hình được). Điện cực ngắn mạch thoáng qua < 200 ms thì không báo. |
-| FR-04 | Chống điện phân và ăn mòn. | Khi khô: dòng qua điện cực ≈ 0 (chỉ còn rò nA). Khi ướt: dòng DC ≤ 3,3 µA (giới hạn bởi 1 MΩ), sau đó firmware chuyển sang đo xung ≤ 2 ms mỗi 10 s. |
+| FR-04 | Chống điện phân và ăn mòn. | Khi khô: dòng qua điện cực ≈ 0 (chỉ còn rò nA). Khi ướt: dòng DC ≤ 3,3 µA (giới hạn bởi 1 MΩ), sau đó firmware chuyển sang đo xung 5 ms mỗi 10 s. |
 | FR-05 | Matter device type **Water Leak Detector (0x0043)** trên EP1. | Có Identify và Boolean State (`StateValue` = TRUE khi rò, kèm sự kiện `StateChange`). Boolean State Configuration là tuỳ chọn, chỉ với feature Visual (LED), vì không có buzzer. |
 | FR-06 | **Power Source** (feature BAT). | Có các thuộc tính `BatVoltage`, `BatPercentRemaining`, `BatChargeLevel`, `BatReplacementNeeded`, `BatReplaceability`, `BatReplacementDescription`, `BatQuantity`. % pin ước tính từ điện áp có tải kết hợp bộ đếm năng lượng trong firmware, vì CR123A có đường xả rất phẳng. |
 | FR-07 | Cảnh báo pin yếu. | `BatChargeLevel` = Warning khi ≤ 15 %, Critical khi ≤ 5 % (ngưỡng điện áp cho CR123A). Gửi qua subscription. Tại chỗ: LED nháy mẫu "pin yếu" mỗi khi bấm nút hoặc khi có sự kiện. |
@@ -102,9 +102,9 @@ TVS 2 chiều, dòng rò thấp, trên E1/E2 của cổng đầu dò rời
 
 - **Khô:** E1 ở 3,3 V nhưng hở mạch nên I = 0 (chỉ rò nA). Q tắt, LEAK_SENSE = 1.
 - **Ướt:** V_G = 3,3 V · 1 MΩ / (1 MΩ + R_w + 20 kΩ) > Vth. Q dẫn, LEAK_SENSE = 0, EXT1 đánh thức chip từ light-sleep hoặc deep-sleep. Dòng qua nước ≤ 3,3 µA vì bị 1 MΩ chặn.
-- **Sau khi xác nhận:** firmware hạ PROBE_EXC = 0 để bỏ phân cực, rồi đo xung 1–2 ms mỗi 10 s. Dòng DC trung bình qua nước < 1 nA.
+- **Sau khi xác nhận:** firmware hạ PROBE_EXC = 0 để bỏ phân cực, rồi đo xung 5 ms mỗi 10 s. Dòng DC trung bình qua nước < 2 nA. Xung 5 ms đủ cho cổng MOSFET nạp tới ngưỡng cả với nước RO (τ ≈ 2,7 ms, xem GĐ3).
   - Nếu để DC 3,3 µA liên tục, lượng điện tích đủ để hoà tan cả lớp vàng ENIG 0,05–0,1 µm của cực dương (≈ 0,2 C/cm²) sẽ đạt sau khoảng 1 ngày. Đây là cận trên, nhưng cho thấy vì sao phải đo xung.
-- **Ngưỡng:** R_w,trip ≈ 1 MΩ · (3,3 / Vth − 1). Với Vth hiệu dụng 0,6–1,5 V, ngưỡng nằm khoảng **1,2–4,5 MΩ**.
+- **Ngưỡng:** R_w,trip ≈ 1 MΩ · (3,3 / Vth − 1). Với Vth của AO3400A 0,65–1,45 V, ngưỡng nằm khoảng **1,3–4 MΩ** (tính chi tiết ở GĐ3).
   - Nước máy trên lược khe 0,5 mm: vài trăm Ω đến vài chục kΩ.
   - Nước RO: ≈ 25–250 kΩ.
   - Màng ẩm sạch trên solder mask: > 100 MΩ.

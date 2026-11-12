@@ -1,0 +1,53 @@
+{
+  "board": {
+    "design_settings": {
+      "defaults": {},
+      "diff_pair_dimensions": [],
+      "drc_exclusions": [],
+      "rules": {},
+      "track_widths": [],
+      "via_dimensions": []
+    }
+  },
+  "boards": [],
+  "libraries": {
+    "pinned_footprint_libs": [],
+    "pinned_symbol_libs": []
+  },
+  "meta": {
+    "filename": "h2-leak-sensor.kicad_pro",
+    "version": 1
+  },
+  "net_settings": {
+    "classes": [],
+    "meta": {
+      "version": 0
+    }
+  },
+  "pcbnew": {
+    "page_layout_descr_file": ""
+  },
+  "sheets": [
+    [
+      "16d164b3-d351-5e8b-a802-eb6deba6124f",
+      "Root"
+    ],
+    [
+      "4b933007-02cb-5a74-a3e4-b569d207e4c1",
+      "Power"
+    ],
+    [
+      "6f5b30f1-15b2-5c98-9eb6-85b5e8217cb8",
+      "MCU"
+    ],
+    [
+      "00c57718-2f18-5aea-b509-814887775e6a",
+      "Probe"
+    ],
+    [
+      "0c2aeeb6-ecf8-5fcb-a497-78b53bed0fd5",
+      "UI_Prog"
+    ]
+  ],
+  "text_variables": {}
+}
