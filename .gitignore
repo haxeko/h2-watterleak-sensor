@@ -8,3 +8,7 @@ _autosave-*
 # Python
 __pycache__/
 *.pyc
+
+# Generated outputs
+hardware/h2-leak-sensor/build/
+hardware/h2-leak-sensor/fab/gerber/

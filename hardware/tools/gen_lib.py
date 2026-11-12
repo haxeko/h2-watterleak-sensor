@@ -262,11 +262,8 @@ def fp_wroom02c():
     it.append(fp_rect(fp, -9, -10, 9, 10, "F.Fab", 0.1))
     it.append(fp_line(fp, -9, -4, 9, -4, "F.Fab", 0.1, "ant"))
     it.append(fp_text(fp, "ANTENNA", 0, -7, "F.Fab", 1.0))
-    # silkscreen: outline segments that do not touch the pads
-    it.append(fp_line(fp, -9.12, -10.12, 9.12, -10.12, "F.SilkS"))
-    it.append(fp_line(fp, -9.12, -10.12, -9.12, -3.6, "F.SilkS"))
-    it.append(fp_line(fp, 9.12, -10.12, 9.12, -3.6, "F.SilkS"))
-    it.append(fp_line(fp, -9.12, -4.0, 9.12, -4.0, "F.SilkS", 0.12, "antline"))
+    # silkscreen: only the pin-1 dot. On this board the antenna part (y < -4) hangs over the board
+    # edge, so an outline there could not be printed; the full outline lives on F.Fab.
     it.append(fp_circle(fp, -10.2, -2.9, 0.25, "F.SilkS", 0.1, fill=True))   # pin-1 dot
     # courtyard
     it.append(fp_rect(fp, -9.75, -10.25, 9.75, 10.75, "F.CrtYd"))
